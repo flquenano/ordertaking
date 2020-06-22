@@ -1,0 +1,22 @@
+{
+  "name": "project-ordertaking-webapp",
+  "version": "1.0.0",
+  "description": "Order taking system with Inventory system and Point of sales",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Francis Luigie C. Quenano",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.1",
+    "mongoose": "^5.9.19",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4",
+    "xss-clean": "^0.1.1"
+  }
+}
