@@ -14,8 +14,8 @@ const userSchema = mongoose.Schema({
   },
   privilege: {
     type: String,
-    default: "cashier",
-    enum: ["cashier", "manager", "admin"]
+    default: "server",
+    enum: ["server", "cashier", "manager", "admin"]
   },
   password: {
     type: String,
