@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const id = mongoose.Types.ObjectId;
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -34,5 +35,35 @@ const userSchema = mongoose.Schema({
     default: true
   }
 });
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModefied("password")) return next();
+  this.password = await bcrypt.hash(this.password, 8);
+  this.password_changed_at = Date.now() - 1000;
+  next();
+});
+
+userSchema.methods.correct_password = async function (candidate, password) {
+  return await bcrypt.compare(candidate, password);
+};
+
+userSchema.methods.create_reset_token = async function () {
+  const reset_token = crypto.randomBytes(32).toString("hex");
+  this.password_reset_toekn = crypto
+    .createHash("sha256")
+    .update(reset_token)
+    .digest("hex");
+};
+
+userSchema.methods.change_password_after = function (JWTTimestamp) {
+  if (this.password_changed_at) {
+    const changed_timestamp = parseInt(
+      this.password_changed_at.getTime() / 1000,
+      10
+    );
+    return JWTTimestamp < changed_timestamp;
+  }
+  return false;
+};
 
 module.exports = mongoose.model("users", userSchema);

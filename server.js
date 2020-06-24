@@ -3,6 +3,8 @@ const dotenv = require("dotenv").config({ path: "./config.env" });
 const app = require("./app");
 const key = require("./config/keys");
 
+console.log(key);
+
 mongoose
   .connect(key.mongoURI, {
     useNewUrlParser: true,
@@ -36,4 +38,4 @@ process.on("unhandledRejection", (err) => {
   process.exit();
 });
 
-server.on("close", () => console.log("Server now turned off!"));
+server.on("close", () => console.log("Server now turned off! "));
