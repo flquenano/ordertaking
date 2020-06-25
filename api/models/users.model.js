@@ -17,6 +17,9 @@ const userSchema = mongoose.Schema({
     default: "server",
     enum: ["server", "cashier", "manager", "admin"]
   },
+  profile: {
+    type: String
+  },
   password: {
     type: String,
     required: true,
@@ -37,7 +40,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModefied("password")) return next();
+  if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 8);
   this.password_changed_at = Date.now() - 1000;
   next();

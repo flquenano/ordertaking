@@ -17,16 +17,32 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.register = catchAsync(async (req, res) => {
-  const { name, email, password } = req.body;
-  const new_user = await User.create({
-    name: name,
-    email: email,
-    password: password
-  });
-  req.user = new_user;
+exports.register = catchAsync(async (req, res, next) => {
+  const { name, email, password, privilege } = req.body;
+  let user = {
+    name,
+    email,
+    password,
+    privilege
+  };
+
+  console.log(req.file);
+  if (req.file === undefined) {
+    user = {
+      ...user,
+      profile: "link"
+    };
+  } else {
+    user = {
+      ...user,
+      profile: req.file.location
+    };
+  }
+  const new_user = await User.create(user);
+  if (!new_user) return next(new AppError("Registration Failed!", 500));
+  req.user = new_user._doc;
   req.user.status_code = 201;
-  return jwt_util.send_token;
+  return jwt_util.send_token(req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -39,5 +55,5 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   req.user = user;
   req.user.status_code = 200;
-  return jwt_util.send_token;
+  return jwt_util.send_token(req, res);
 });

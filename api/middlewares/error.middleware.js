@@ -30,25 +30,24 @@ const send_error_development = (err, res) => {
 };
 
 const send_error_production = (err, res) => {
-  const { statusCode, status, errmsg, stack, isOperational } = err;
+  const { statusCode, status, msg, stack, isOperational } = err;
   if (isOperational) {
     return res.status(statusCode).json({
       status,
-      message: message
+      message: msg
     });
   }
-  console.log("Error: ", err);
   return res.status(500).json({
     status: "error",
     message: "Something went wrong!`"
   });
 };
 
-module.exports = (err, req, res) => {
+module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
   if (process.env.NODE_ENV === "development") {
-    return send_error_development(err, req, res);
+    return send_error_development(err, res);
   }
   let error = { ...err };
   if (err.code === 11000) error = duplicate_field_db(error);
