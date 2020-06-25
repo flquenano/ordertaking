@@ -25,8 +25,6 @@ exports.register = catchAsync(async (req, res, next) => {
     password,
     privilege
   };
-
-  console.log(req.file);
   if (req.file === undefined) {
     user = {
       ...user,
@@ -53,7 +51,35 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correct_password(password, user.password))) {
     return next(new AppError("Incorrect Email or Password!", 401));
   }
-  req.user = user;
+  req.user = user._doc;
   req.user.status_code = 200;
   return jwt_util.send_token(req, res);
 });
+
+exports.protect = catchAsync(async (req, res, next) => {
+  const token = jwt_util.get_token(req);
+  console.log(token);
+  if (!token)
+    return next(new AppError("User verification failed! Please Login!", 401));
+
+  const decoded = await jwt_util.decode_token(token);
+  const user = await User.findById(decoded.id);
+
+  if (!user) {
+    return next(new AppError("User doesn't exists!", 401));
+  }
+
+  if (user.change_password_after(decoded.iat)) {
+    return next(new AppError("User recently changed password!", 401));
+  }
+
+  req.user = user;
+  next();
+});
+
+exports.restrict_to = (...privileges) => (req, res, next) => {
+  if (!privileges.includes(req.user.privilege)) {
+    return next(new AppError("Not Authorized!", 403));
+  }
+  next();
+};

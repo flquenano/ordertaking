@@ -1,16 +1,7 @@
 const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
-const catchAsyncUtil = require("../utils/catchAsync.util");
-
-const get_token = (req) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    return req.headers.authorization.split(" ")[1];
-  }
-};
+const catchAsync = require("../utils/catchAsync.util");
+const { get } = require("http");
 
 const generate_token = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -29,6 +20,16 @@ exports.send_token = (req, res) => {
       user
     }
   });
+};
+
+exports.get_token = (req) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    return req.headers.authorization.split(" ")[1];
+  }
 };
 
 exports.decode_token = async (token) =>
