@@ -8,7 +8,11 @@ const foodItemSchema = mongoose.Schema({
     type: String,
     enum: ["breakfast", "lunch", "value", "drinks", "dessert", "side"]
   },
-  availability: { type: Boolean, default: true }
+  availability: { type: Boolean, default: true },
+  created_at: {
+    type: Date,
+    default: Date.now()
+  }
 });
 
 module.exports = mongoose.model("fooditems", foodItemSchema);
