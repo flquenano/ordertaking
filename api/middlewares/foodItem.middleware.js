@@ -14,7 +14,15 @@ exports.get_food_item = catchAsync(async (req, res, next) => {
     }
   });
 });
-exports.get_food_items = catchAsync(async (req, res, next) => {});
+exports.get_food_items = catchAsync(async (req, res, next) => {
+  const docs = await FoodItem.find({});
+  res.status(200).json({
+    status: "success",
+    data: {
+      food: docs
+    }
+  });
+});
 
 exports.add_food = catchAsync(async (req, res, next) => {
   const new_doc = await FoodItem.create(req.body);
@@ -27,7 +35,7 @@ exports.add_food = catchAsync(async (req, res, next) => {
 });
 
 exports.remove_food = catchAsync(async (req, res, next) => {
-  const doc = await FoodItem.findByIdAndDelete(req.body.food_id);
+  const doc = await FoodItem.findByIdAndDelete(req.params.id);
   if (!doc) {
     return next(new AppError("Record doesn't exists!", 404));
   }
@@ -38,8 +46,7 @@ exports.remove_food = catchAsync(async (req, res, next) => {
 });
 
 exports.edit_food = catchAsync(async (req, res, next) => {
-  const { food_id, ...body } = req.body;
-  const doc = FoodItem.findByIdAndUpdate(food_id, body, {
+  const doc = await FoodItem.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   });

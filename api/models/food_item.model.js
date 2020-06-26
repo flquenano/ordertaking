@@ -6,7 +6,7 @@ const foodItemSchema = mongoose.Schema({
   unitPrice: { type: Number, required: true },
   type: {
     type: String,
-    enum: ["breakfast", "lunch", "value", "drinks", "dessert", "side"]
+    enum: ["breakfast", "lunch", "value", "drinks", "dessert", "side", "piece"]
   },
   availability: { type: Boolean, default: true },
   created_at: {

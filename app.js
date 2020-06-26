@@ -9,6 +9,7 @@ const globalErrorHandler = require("./api/middlewares/error.middleware");
 
 //Routes
 const user_routes = require("./api/routes/user.routes");
+const food_routes = require("./api/routes/food.routes");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(xss());
 // 2.) Routes
 
 app.use(`${process.env.APP_VER}/user`, user_routes);
+app.use(`${process.env.APP_VER}/food`, food_routes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`${req.originalUrl} not found!`, 404));
