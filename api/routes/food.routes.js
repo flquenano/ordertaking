@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const combo_router = require("./combo.routes");
+
 const { protect, restrict_to } = require("../middlewares/auth.middleware");
 const {
   add_food,
@@ -9,6 +11,8 @@ const {
   get_food_item,
   get_food_items
 } = require("../middlewares/foodItem.middleware");
+
+router.use("/combo", combo_router);
 
 router
   .route("/item")

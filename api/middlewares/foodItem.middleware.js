@@ -10,7 +10,7 @@ exports.get_food_item = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      food: doc
+      doc
     }
   });
 });
@@ -19,7 +19,7 @@ exports.get_food_items = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      food: docs
+      docs
     }
   });
 });
@@ -29,7 +29,7 @@ exports.add_food = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     data: {
-      food: new_doc
+      doc: new_doc
     }
   });
 });
