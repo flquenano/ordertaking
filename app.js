@@ -32,6 +32,13 @@ app.use(xss());
 app.use(`${process.env.APP_VER}/user`, user_routes);
 app.use(`${process.env.APP_VER}/food`, food_routes);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 app.all("*", (req, res, next) => {
   next(new AppError(`${req.originalUrl} not found!`, 404));
 });

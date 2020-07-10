@@ -53,6 +53,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   req.user = user._doc;
   req.user.status_code = 200;
+  req.app.socket.emit("test", JSON.stringify(user._doc));
   return jwt_util.send_token(req, res);
 });
 
