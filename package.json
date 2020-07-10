@@ -4,13 +4,16 @@
   "description": "Order taking system with Inventory system and Point of sales",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"nodemon server.js \" \"npm start --prefix client\" ",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Francis Luigie C. Quenano",
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.704.0",
     "bcryptjs": "^2.4.3",
+    "concurrently": "^5.2.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -18,12 +21,15 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "helmet": "^3.23.1",
+    "history": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.19",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "nodemon": "^2.0.4",
+    "react-hook-form": "^6.0.1",
+    "socket.io": "^2.3.0",
     "xss-clean": "^0.1.1"
   }
 }

@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config({ path: "./config.env" });
 const app = require("./app");
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+app.io = io;
 const key = require("./config/keys");
 
 mongoose
@@ -18,8 +21,13 @@ mongoose
   });
 
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+
+server.listen(PORT, () => {
   console.log(`App running at port ${PORT}`);
+});
+
+io.on("connection", (socket) => {
+  app.socket = socket;
 });
 
 process.on("uncaughtException", (err) => {
@@ -37,3 +45,5 @@ process.on("unhandledRejection", (err) => {
 });
 
 server.on("close", () => console.log("Server now turned off! "));
+
+exports.socketIOClient = io;
